@@ -1,6 +1,6 @@
 {
 	"name": "nestenv",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"private": false,
 	"keywords": [],
 	"author": "",
@@ -17,7 +17,12 @@
 			"types": "./dist/presets.d.ts"
 		}
 	},
-	"files": ["dist", "package.json", "LICENSE", "README.md"],
+	"files": [
+		"dist",
+		"package.json",
+		"LICENSE",
+		"README.md"
+	],
 	"scripts": {
 		"build": "bunchee",
 		"dev": "bunchee -w --no-clean",

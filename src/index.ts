@@ -18,5 +18,4 @@ export function createTypedConfigService<T extends z.ZodType>(schema: T) {
 	return ConfigService<z.infer<T>, true>;
 }
 
-// Re-export zod for convenience
 export { z };

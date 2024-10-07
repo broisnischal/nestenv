@@ -5,7 +5,7 @@
 ## Installation
 
 ```bash
-npm install envnest zod
+npm install envnest
 ```
 
 ## Usage

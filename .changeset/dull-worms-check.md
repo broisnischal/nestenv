@@ -1,0 +1,5 @@
+---
+"envnest": patch
+---
+
+strict-required

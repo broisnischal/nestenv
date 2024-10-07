@@ -1,5 +1,11 @@
 # nestenv
 
+## 0.0.7
+
+### Patch Changes
+
+- 84fbec2: Number-issuefixed
+
 ## 0.0.6
 
 ### Patch Changes

@@ -1,8 +1,14 @@
 {
 	"name": "nestenv",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"private": false,
-	"keywords": ["nestjs", "zod", "environment", "variables", "typesafe"],
+	"keywords": [
+		"nestjs",
+		"zod",
+		"environment",
+		"variables",
+		"typesafe"
+	],
 	"author": "Nischal Dahal",
 	"license": "ISC",
 	"description": "Typesafe environment variables for NestJS using Zod with enhanced features.",
@@ -17,7 +23,12 @@
 			"types": "./dist/presets.d.ts"
 		}
 	},
-	"files": ["dist", "package.json", "LICENSE", "README.md"],
+	"files": [
+		"dist",
+		"package.json",
+		"LICENSE",
+		"README.md"
+	],
 	"scripts": {
 		"build": "bunchee",
 		"dev": "bunchee -w --no-clean",

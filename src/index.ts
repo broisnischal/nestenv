@@ -1,7 +1,6 @@
-import { z } from "zod";
 import { ConfigService } from "@nestjs/config";
+import { z } from "zod";
 
-// @mat
 export type Prettify<T> = {
 	[K in keyof T]: T[K];
 } & {};

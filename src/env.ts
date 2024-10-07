@@ -1,5 +1,5 @@
 // biome-ignore lint/style/useImportType: <explanation>
-import { z, createNestEnvValidator, createTypedConfigService } from "./index";
+import { createNestEnvValidator, createTypedConfigService, z } from "./index";
 
 const envSchema = z.object({
 	NODE_ENV: z

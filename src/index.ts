@@ -7,10 +7,27 @@ export type Prettify<T> = {
 
 export function createNestEnvValidator<T extends z.ZodType>(
 	schema: T,
-	options: { logErrors?: boolean; throwOnError?: boolean } = {},
+	options: {
+		logErrors?: boolean;
+		throwOnError?: boolean;
+		useDefaults?: boolean;
+	} = {},
 ): () => z.infer<T> {
 	return () => {
-		const result = schema.safeParse(process.env);
+		const parseOptions: z.ParseParams = {
+			path: [],
+			errorMap: (issue, ctx) => {
+				return {
+					message: `Invalid value for environment variable ${issue.path.join(".")}`,
+				};
+			},
+			async: false,
+		};
+		if (options.useDefaults !== false) {
+			parseOptions.path = [];
+		}
+
+		const result = schema.safeParse(process.env, parseOptions);
 
 		if (!result.success) {
 			if (options.logErrors !== false) {

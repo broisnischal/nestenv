@@ -1,5 +1,8 @@
 # envnest
 
+#### This package is currently in development and not yet ready for production use.
+
+
 Typesafe environment variables for NestJS using Zod with enhanced features.
 
 ## Installation

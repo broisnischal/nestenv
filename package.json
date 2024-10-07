@@ -2,13 +2,7 @@
 	"name": "envnest",
 	"version": "0.0.2",
 	"private": false,
-	"keywords": [
-		"nestjs",
-		"zod",
-		"environment",
-		"variables",
-		"typesafe"
-	],
+	"keywords": ["nestjs", "zod", "environment", "variables", "typesafe"],
 	"author": "Nischal Dahal",
 	"license": "MIT",
 	"type": "module",
@@ -20,19 +14,16 @@
 		"./package.json": "./package.json",
 		".": {
 			"types": "./dist/index.d.ts",
-			"default": "./dist/index.js"
+			"default": "./dist/index.js",
+			"import": "./dist/index.mjs"
 		},
 		"./presets": {
 			"default": "./dist/presets.js",
-			"types": "./dist/presets.d.ts"
+			"types": "./dist/presets.d.ts",
+			"import": "./dist/presets.mjs"
 		}
 	},
-	"files": [
-		"dist",
-		"package.json",
-		"LICENSE",
-		"README.md"
-	],
+	"files": ["dist", "package.json", "LICENSE", "README.md"],
 	"scripts": {
 		"build": "bunchee",
 		"dev": "bunchee -w --no-clean",

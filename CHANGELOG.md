@@ -1,5 +1,11 @@
 # nestenv
 
+## 0.0.4
+
+### Patch Changes
+
+- 3b60d87: fix
+
 ## 0.0.3
 
 ### Patch Changes

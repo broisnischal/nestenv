@@ -1,5 +1,12 @@
 # nestenv
 
+## 0.0.2
+
+### Patch Changes
+
+- 85cf8a7: init-project
+- 0b32df9: chore:module-fix
+
 ## 0.0.1
 
 ### Patch Changes

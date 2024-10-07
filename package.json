@@ -1,19 +1,20 @@
 {
 	"name": "nestenv",
 	"version": "1.0.0",
-	"main": "dist/index.js",
-	"module": "dist/index.mjs",
-	"types": "dist/index.d.ts",
 	"private": false,
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
-	"description": "",
+	"description": "Typesafe environment variables for NestJS using Zod with enhanced features.",
 	"exports": {
 		"./package.json": "./package.json",
 		".": {
 			"types": "./dist/index.d.ts",
 			"default": "./dist/index.js"
+		},
+		"./presets": {
+			"default": "./dist/presets.js",
+			"types": "./dist/presets.d.ts"
 		}
 	},
 	"files": ["dist", "package.json", "LICENSE", "README.md"],

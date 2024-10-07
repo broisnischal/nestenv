@@ -1,15 +1,26 @@
 {
 	"name": "envnest",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"private": false,
-	"keywords": ["nestjs", "zod", "environment", "variables", "typesafe"],
+	"keywords": [
+		"nestjs",
+		"zod",
+		"environment",
+		"variables",
+		"typesafe"
+	],
 	"author": "Nischal Dahal",
 	"license": "MIT",
 	"description": "Typesafe environment variables for NestJS using Zod with enhanced features.",
 	"main": "dist/index.js",
 	"module": "dist/index.mjs",
 	"types": "dist/index.d.ts",
-	"files": ["dist", "package.json", "LICENSE", "README.md"],
+	"files": [
+		"dist",
+		"package.json",
+		"LICENSE",
+		"README.md"
+	],
 	"scripts": {
 		"build": "tsup src/index.ts --format cjs,esm --dts",
 		"dev": "bunchee -w --no-clean",

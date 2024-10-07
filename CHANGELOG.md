@@ -1,5 +1,11 @@
 # nestenv
 
+## 0.0.6
+
+### Patch Changes
+
+- 0e39e36: fix-changes
+
 ## 0.0.5
 
 ### Patch Changes

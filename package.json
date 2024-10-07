@@ -4,7 +4,7 @@
 	"private": false,
 	"keywords": ["nestjs", "zod", "environment", "variables", "typesafe"],
 	"author": "Nischal Dahal",
-	"license": "ISC",
+	"license": "MIT",
 	"description": "Typesafe environment variables for NestJS using Zod with enhanced features.",
 	"exports": {
 		"./package.json": "./package.json",

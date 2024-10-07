@@ -83,7 +83,7 @@ envnest comes with built-in presets for common environment variables. You can us
 import { createEnvConfig, presets } from "envnest";
 
 const envSchema = presets.node().extend({
-  DATABASE_URL: presets.databaseUrl(),
+  ...presets.databaseUrl,
   // Add your custom environment variables here
 });
 

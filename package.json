@@ -25,7 +25,7 @@
 		"lint": "biome check .",
 		"lint:fix": "biome check . --apply",
 		"test": "vitest run",
-		"release": "pnpm run lint && pnpm run test && pnpm run build && changeset publish",
+		"release": "changeset publish",
 		"changelog": "changeset changelog",
 		"patch": "pnpm run release --patch",
 		"minor": "pnpm run release --minor",

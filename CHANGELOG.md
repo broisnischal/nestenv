@@ -1,5 +1,11 @@
 # nestenv
 
+## 0.0.10
+
+### Patch Changes
+
+- 2e0e3ae: ready-for-prod
+
 ## 0.0.9
 
 ### Patch Changes

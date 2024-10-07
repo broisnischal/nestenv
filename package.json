@@ -1,6 +1,6 @@
 {
-	"name": "nestenv",
-	"version": "0.0.1",
+	"name": "@nestjs/env",
+	"version": "0.0.0",
 	"private": false,
 	"keywords": ["nestjs", "zod", "environment", "variables", "typesafe"],
 	"author": "Nischal Dahal",

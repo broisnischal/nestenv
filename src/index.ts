@@ -66,11 +66,20 @@ export function createEnvConfig<T extends z.ZodType>(schema: T) {
 
 	const config = new ConfigService<Env, true>();
 
+	const validateConfig = (config: Record<string, unknown>) => {
+		const result = schema.safeParse(config);
+		if (!result.success) {
+			throw new Error(`Config validation error: ${result.error.toString()}`);
+		}
+		return result.data;
+	};
+
 	return {
 		createNestEnvValidator,
 		config,
 		schema,
 		createEnvGetter,
+		validateConfig,
 	};
 }
 

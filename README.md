@@ -1,272 +1,138 @@
 # envnest
 
-#### This package is currently in development and not yet ready for production use.
-
-
-Typesafe environment variables for NestJS using Zod with enhanced features.
+`envnest` is a TypeScript library for NestJS that provides type-safe environment variable validation and access using Zod schemas.
 
 ## Installation
 
 ```bash
-npm install envnest
+npm install envnest zod
 ```
 
-## Features
-
-- Runtime validation of environment variables
-- Type-safe access to environment variables through the `ConfigService`
-- Automatic throwing of errors if required environment variables are missing or
-  invalid
-- Leverages Zod for powerful schema validation
-- Preset schemas for common environment variables
-- Customizable error handling and logging
-- Direct environment variable getter with type safety
-
-## Basic Usage
+## Usage
 
 ### 1. Define your environment schema
 
-Create a file `src/env.config.ts`:
+Create a file to define your environment schema using Zod:
 
 ```typescript
+// src/config/env.config.ts
 import { createEnvConfig, z } from "envnest";
-import { commonEnvs, databaseEnvs } from "envnest/presets";
 
-const { config, schema, validateEnv, getEnv } = createEnvConfig(
-    z.object({
-        ...commonEnvs,
-        ...databaseEnvs,
-        CUSTOM_VAR: z.string().min(1),
-    }),
-);
+const envSchema = z.object({
+  NODE_ENV: z.enum(["development", "production"]).default("development"),
+  PORT: z.string().transform(Number).default("3000"),
+  DATABASE_URL: z.string().url(),
+  TEST: z.string(),
+});
 
-// Augment ProcessEnv
+export const envService = createEnvConfig(envSchema);
+
 declare global {
-    namespace NodeJS {
-        interface ProcessEnv extends z.infer<typeof schema> {}
-    }
+  namespace NodeJS {
+    interface ProcessEnv extends z.infer<typeof envSchema> {}
+  }
 }
-
-export { config, getEnv, validateEnv };
 ```
 
-### 2. Use the validator in your main module
+### 2. Configure NestJS ConfigModule
 
-In your `src/app.module.ts`:
+In your `app.module.ts` file, set up the ConfigModule using the `envService`:
 
 ```typescript
-import { Module } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
-import { validateEnv } from "./env.config";
+import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { envService } from './config/env.config';
 
 @Module({
-    imports: [
-        ConfigModule.forRoot({
-            validate: validateEnv,
-            isGlobal: true,
-        }),
-        // Other modules...
-    ],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      validate: envService.validateConfig,
+    }),
+    // other imports...
+  ],
+  // ...
 })
 export class AppModule {}
 ```
 
-### 3. Use the typed config in your services
+### 3. Use the validated environment variables
 
-Create a service, e.g., `src/app.service.ts`:
+You can now use the validated environment variables in your services:
 
 ```typescript
-import { Injectable } from "@nestjs/common";
-import { config, getEnv } from "./env.config";
+import { Injectable } from '@nestjs/common';
+import { envService } from './config/env.config';
 
 @Injectable()
 export class AppService {
-    getDatabaseInfo() {
-        // Using the config service
-        const dbUrl = config.get("DATABASE_URL");
-        const dbSsl = config.get("DATABASE_SSL");
-
-        // Using the direct env getter
-        const port = getEnv("PORT");
-
-        return { dbUrl, dbSsl, port };
-    }
+  getHello(): string {
+    const url = envService.config.get("DATABASE_URL");
+    return `testing ${url} ${process.env.PORT}`;
+  }
 }
 ```
 
-## Advanced Usage
+## Presets
 
-### Custom Error Handling
+envnest comes with built-in presets for common environment variables. You can use these presets to quickly set up your environment schema.
 
-You can customize error handling when creating the env config:
-
-```typescript
-const { validateEnv } = createEnvConfig(
-    schema,
-    {
-        logErrors: true,
-        throwOnError: false,
-    },
-);
-```
-
-### Using Preset Schemas
+### Using a preset
 
 ```typescript
-import { createEnvConfig, z } from "@nestenv/core";
-import { awsEnvs, commonEnvs, databaseEnvs } from "@nestenv/core/presets";
+import { createEnvConfig, presets } from "envnest";
 
-const { config, schema, validateEnv } = createEnvConfig(
-    z.object({
-        ...commonEnvs,
-        ...databaseEnvs,
-        ...awsEnvs,
-        CUSTOM_VAR: z.string().min(1),
-    }),
-);
+const envSchema = presets.node().extend({
+  DATABASE_URL: presets.databaseUrl(),
+  // Add your custom environment variables here
+});
 
-export { config, validateEnv };
+export const envService = createEnvConfig(envSchema);
 ```
 
-### Creating Custom Presets
+### Available presets
 
-You can create your own preset schemas:
+- `presets.node()`: Common Node.js environment variables (NODE_ENV, PORT)
+- `presets.databaseUrl()`: Database URL validation
+- `presets.jwt()`: JWT secret and expiration time
+- `presets.cors()`: CORS configuration
+
+## Custom Presets
+
+You can create custom presets for your specific needs:
 
 ```typescript
-// src/custom-presets.ts
-import { z } from "zod";
+import { z } from "envnest";
 
-export const myAppEnvs = {
-    APP_NAME: z.string().min(1),
-    APP_VERSION: z.string().regex(/^\d+\.\d+\.\d+$/),
-    FEATURE_FLAGS: z.string().transform((s) =>
-        s.split(",").map((f) => f.trim())
-    ),
-};
+const myCustomPreset = () => z.object({
+  CUSTOM_API_KEY: z.string().min(1),
+  CUSTOM_API_URL: z.string().url(),
+});
+
+const envSchema = presets.node().extend({
+  ...myCustomPreset().shape,
+  // Other environment variables
+});
+
+export const envService = createEnvConfig(envSchema);
 ```
 
-Then use them in your env config:
+## Features
 
-```typescript
-import { createEnvConfig, z } from "@nestenv/core";
-import { commonEnvs } from "@nestenv/core/presets";
-import { myAppEnvs } from "./custom-presets";
-
-const { config, schema, validateEnv } = createEnvConfig(
-    z.object({
-        ...commonEnvs,
-        ...myAppEnvs,
-    }),
-);
-
-export { config, validateEnv };
-```
-
-## Real-world Use Case Scenarios
-
-### Scenario 1: Microservice with Database and AWS Integration
-
-```typescript
-import { createEnvConfig, z } from "@nestenv/core";
-import { awsEnvs, commonEnvs, databaseEnvs } from "@nestenv/core/presets";
-
-const { config, validateEnv } = createEnvConfig(
-    z.object({
-        ...commonEnvs,
-        ...databaseEnvs,
-        ...awsEnvs,
-        SERVICE_NAME: z.string().min(1),
-        CACHE_TTL: z.coerce.number().positive(),
-    }),
-);
-
-export { config, validateEnv };
-```
-
-### Scenario 2: Authentication Service
-
-```typescript
-import { createEnvConfig, z } from "@nestenv/core";
-import { authEnvs, commonEnvs } from "@nestenv/core/presets";
-
-const { config, validateEnv } = createEnvConfig(
-    z.object({
-        ...commonEnvs,
-        ...authEnvs,
-        OAUTH_CLIENT_ID: z.string().min(1),
-        OAUTH_CLIENT_SECRET: z.string().min(1),
-        ALLOWED_ORIGINS: z.string().transform((s) => s.split(",")),
-    }),
-);
-
-export { config, validateEnv };
-```
-
-### Scenario 3: Logging and Monitoring Service
-
-```typescript
-import { createEnvConfig, z } from "@nestenv/core";
-import { commonEnvs } from "@nestenv/core/presets";
-
-const { config, validateEnv } = createEnvConfig(
-    z.object({
-        ...commonEnvs,
-        ELASTICSEARCH_URL: z.string().url(),
-        RETENTION_DAYS: z.coerce.number().positive(),
-        ALERT_EMAIL: z.string().email(),
-        METRICS_INTERVAL: z.coerce.number().positive(),
-    }),
-);
-
-export { config, validateEnv };
-```
+- Type-safe environment variable access
+- Automatic validation of environment variables
+- Default values support
+- Global type augmentation for `process.env`
+- Built-in presets for common configurations
+- Custom preset support
 
 ## API Reference
 
-### `createEnvConfig(schema: ZodType, options?: { logErrors?: boolean; throwOnError?: boolean })`
-
-Creates a configuration object with the following properties:
-
-- `config`: A typed ConfigService
-- `schema`: The Zod schema used for validation
-- `validateEnv`: A validator function for NestJS's ConfigModule
-- `getEnv`: A type-safe environment variable getter
-
-Options:
-
-- `logErrors`: Whether to log validation errors (default: true)
-- `throwOnError`: Whether to throw an error on validation failure (default:
-  true)
-
-### Preset Schemas
-
-The following preset schemas are available in `@nestenv/core/presets`:
-
-- `commonEnvs`: Common environment variables (NODE_ENV, PORT, LOG_LEVEL)
-- `databaseEnvs`: Database-related environment variables (DATABASE_URL,
-  DATABASE_SSL)
-- `awsEnvs`: AWS-related environment variables (AWS_ACCESS_KEY_ID,
-  AWS_SECRET_ACCESS_KEY, AWS_REGION)
-- `authEnvs`: Authentication-related environment variables (JWT_SECRET,
-  JWT_EXPIRATION)
-
-## Best Practices
-
-1. Keep your environment schema in a separate file (e.g., `env.config.ts`) for
-   better organization.
-2. Use preset schemas when possible to ensure consistency across different parts
-   of your application.
-3. Create custom presets for environment variables that are specific to your
-   application or domain.
-4. Always use the typed `config` or `getEnv` function to access environment
-   variables in your application code.
-5. Leverage Zod's transformation capabilities to parse and transform environment
-   variables as needed (e.g., converting comma-separated strings to arrays).
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+- `createEnvConfig(schema: ZodSchema)`: Creates a configuration service with validation
+- `envService.config`: Typed ConfigService instance
+- `envService.validateConfig`: Validation function for use with NestJS ConfigModule
+- `presets`: Object containing built-in presets
 
 ## License
 
-This project is licensed under the MIT License.
+[MIT](LICENSE)

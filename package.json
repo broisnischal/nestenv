@@ -11,7 +11,11 @@
 	],
 	"author": "Nischal Dahal",
 	"license": "MIT",
+	"type": "module",
 	"description": "Typesafe environment variables for NestJS using Zod with enhanced features.",
+	"main": "dist/index.js",
+	"module": "dist/index.mjs",
+	"types": "dist/index.d.ts",
 	"exports": {
 		"./package.json": "./package.json",
 		".": {

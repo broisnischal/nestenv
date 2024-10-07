@@ -1,5 +1,0 @@
----
-"@nestjs/env": patch
----
-
-publish

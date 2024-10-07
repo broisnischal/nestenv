@@ -1,5 +1,11 @@
 # nestenv
 
+## 0.0.8
+
+### Patch Changes
+
+- c9c302f: Fixed optional env issue
+
 ## 0.0.7
 
 ### Patch Changes

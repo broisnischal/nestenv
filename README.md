@@ -135,4 +135,4 @@ export const envService = createEnvConfig(envSchema);
 
 ## License
 
-[MIT](LICENSE)
+This project is licensed under the [MIT](LICENSE) License. See the [LICENSE](LICENSE) file for more details. 

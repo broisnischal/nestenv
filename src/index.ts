@@ -25,61 +25,63 @@ function convertToNumber(value: unknown): number | unknown {
 const zodNumberFromString = z.preprocess(convertToNumber, z.number());
 
 export function createNestEnvValidator<T extends z.ZodType>(
-	schema: T,
-	options: {
-		logErrors?: boolean;
-		throwOnError?: boolean;
-		useDefaults?: boolean;
-	} = {},
+  schema: T,
+  options: {
+    logErrors?: boolean;
+    throwOnError?: boolean;
+    useDefaults?: boolean;
+  } = {}
 ): () => z.infer<T> {
-	return () => {
-		const parseOptions: z.ParseParams = {
-			path: [],
-			errorMap: (issue, ctx) => {
-				return {
-					message: `Invalid value for environment variable ${issue.path.join(".")}`,
-				};
-			},
-			async: false,
-		};
-		if (options.useDefaults !== false) {
-			parseOptions.path = [];
-		}
+  return () => {
+    const parseOptions: z.ParseParams = {
+      path: [],
+      errorMap: (issue, ctx) => {
+        return {
+          message: `Invalid value for environment variable ${issue.path.join(
+            "."
+          )}`,
+        };
+      },
+      async: false,
+    };
+    if (options.useDefaults !== false) {
+      parseOptions.path = [];
+    }
 
-		// Preprocess the schema to handle number conversions
-		const preprocessedSchema = z.preprocess((obj) => {
-			if (typeof obj === "object" && obj !== null) {
-				return Object.fromEntries(
-					Object.entries(obj).map(([key, value]) => {
-						// @ts-ignore
-						// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-						const fieldSchema = (schema as any).shape?.[key];
-						if (fieldSchema instanceof z.ZodNumber) {
-							return [key, convertToNumber(value)];
-						}
-						return [key, value];
-					}),
-				);
-			}
-			return obj;
-		}, schema);
+    // Preprocess the schema to handle number conversions
+    const preprocessedSchema = z.preprocess((obj) => {
+      if (typeof obj === "object" && obj !== null) {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => {
+            // @ts-ignore
+            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+            const fieldSchema = (schema as any).shape?.[key];
+            if (fieldSchema instanceof z.ZodNumber) {
+              return [key, convertToNumber(value)];
+            }
+            return [key, value];
+          })
+        );
+      }
+      return obj;
+    }, schema);
 
-		const result = preprocessedSchema.safeParse(process.env, parseOptions);
+    const result = preprocessedSchema.safeParse(process.env, parseOptions);
 
-		if (!result.success) {
-			if (options.logErrors !== false) {
-				console.error(
-					"❌ Invalid environment variables:",
-					result.error.format(),
-				);
-			}
-			if (options.throwOnError !== false) {
-				throw new Error("Invalid environment variables");
-			}
-		}
+    if (!result.success) {
+      if (options.logErrors !== false) {
+        console.error(
+          "❌ Invalid environment variables:",
+          result.error.format()
+        );
+      }
+      if (options.throwOnError !== false) {
+        throw new Error("Invalid environment variables");
+      }
+    }
 
-		return result.success ? result.data : process.env;
-	};
+    return result.success ? result.data : process.env;
+  };
 }
 
 export function createTypedConfigService<T extends z.ZodType>(schema: T) {

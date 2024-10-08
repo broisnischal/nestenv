@@ -192,3 +192,51 @@ Creates a Zod schema by combining multiple preset schemas.
 ## License
 
 MIT
+
+
+<!-- ////  -->
+
+
+## Presets
+
+envnest comes with built-in presets for common environment variables. You can use these presets to quickly set up your environment schema.
+
+### Using a preset
+
+```typescript
+import { createEnvConfig, presets } from "envnest";
+
+const envSchema = presets.node().extend({
+  ...presets.databaseUrl,
+  // Add your custom environment variables here
+});
+
+export const envService = createEnvConfig(envSchema);
+```
+
+### Available presets
+
+- `presets.node()`: Common Node.js environment variables (NODE_ENV, PORT)
+- `presets.databaseUrl()`: Database URL validation
+- `presets.jwt()`: JWT secret and expiration time
+- `presets.cors()`: CORS configuration
+
+## Custom Presets
+
+You can create custom presets for your specific needs:
+
+```typescript
+import { z } from "envnest";
+
+const myCustomPreset = () => z.object({
+  CUSTOM_API_KEY: z.string().min(1),
+  CUSTOM_API_URL: z.string().url(),
+});
+
+const envSchema = presets.node().extend({
+  ...myCustomPreset().shape,
+  // Other environment variables
+});
+
+export const envService = createEnvConfig(envSchema);
+```

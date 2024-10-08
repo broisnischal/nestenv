@@ -25,10 +25,10 @@
 		"typesafe-env"
 	],
 	"description": "Typesafe environment variables for NestJS using zod.",
-	"homepage": "https://github.com/nischal-dahal/envnest",
+	"homepage": "https://github.com/broisnischal/nestenv",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/nischal-dahal/envnest"
+		"url": "https://github.com/broisnischal/nestenv"
 	},
 	"sponsor": {
 		"url": "https://nischal.pro"

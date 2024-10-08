@@ -1,7 +1,5 @@
 # [envnest](https://www.npmjs.com/package/envnest)
 
-## This package is in underdevelopment and should not be used in production.
-
 `envnest` is a TypeScript library for NestJS that provides type-safe environment variable validation and access using Zod schemas.
 
 ## Installation
@@ -75,50 +73,6 @@ export class AppService {
 }
 ```
 
-## Presets
-
-envnest comes with built-in presets for common environment variables. You can use these presets to quickly set up your environment schema.
-
-### Using a preset
-
-```typescript
-import { createEnvConfig, presets } from "envnest";
-
-const envSchema = presets.node().extend({
-  ...presets.databaseUrl,
-  // Add your custom environment variables here
-});
-
-export const envService = createEnvConfig(envSchema);
-```
-
-### Available presets
-
-- `presets.node()`: Common Node.js environment variables (NODE_ENV, PORT)
-- `presets.databaseUrl()`: Database URL validation
-- `presets.jwt()`: JWT secret and expiration time
-- `presets.cors()`: CORS configuration
-
-## Custom Presets
-
-You can create custom presets for your specific needs:
-
-```typescript
-import { z } from "envnest";
-
-const myCustomPreset = () => z.object({
-  CUSTOM_API_KEY: z.string().min(1),
-  CUSTOM_API_URL: z.string().url(),
-});
-
-const envSchema = presets.node().extend({
-  ...myCustomPreset().shape,
-  // Other environment variables
-});
-
-export const envService = createEnvConfig(envSchema);
-```
-
 ## Features
 
 - Type-safe environment variable access
@@ -133,7 +87,6 @@ export const envService = createEnvConfig(envSchema);
 - `createEnvConfig(schema: ZodSchema)`: Creates a configuration service with validation
 - `envService.config`: Typed ConfigService instance
 - `envService.validateConfig`: Validation function for use with NestJS ConfigModule
-- `presets`: Object containing built-in presets
 
 ## License
 

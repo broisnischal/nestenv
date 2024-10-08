@@ -1,5 +1,11 @@
 # nestenv
 
+## 0.0.13
+
+### Patch Changes
+
+- fc1d997: Docs-updated
+
 ## 0.0.12
 
 ### Patch Changes

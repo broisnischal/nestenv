@@ -1,6 +1,6 @@
 {
 	"name": "envnest",
-	"version": "0.0.12",
+	"version": "0.0.13",
 	"private": false,
 	"keywords": [
 		".env",
@@ -42,7 +42,12 @@
 	"main": "dist/index.js",
 	"module": "dist/index.mjs",
 	"types": "dist/index.d.ts",
-	"files": ["dist", "package.json", "LICENSE", "README.md"],
+	"files": [
+		"dist",
+		"package.json",
+		"LICENSE",
+		"README.md"
+	],
 	"scripts": {
 		"build": "tsup src/index.ts --format cjs,esm --dts",
 		"dev": "bunchee -w --no-clean",

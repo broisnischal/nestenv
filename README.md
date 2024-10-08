@@ -1,4 +1,4 @@
-# envnest
+# [envnest](https://www.npmjs.com/package/envnest)
 
 `envnest` is a TypeScript library for NestJS that provides type-safe environment variable validation and access using Zod schemas.
 

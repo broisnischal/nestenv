@@ -1,5 +1,11 @@
 # nestenv
 
+## 0.0.12
+
+### Patch Changes
+
+- bcf2a22: Fixed issue of package not importing, and updated the package readme.
+
 ## 0.0.11
 
 ### Patch Changes

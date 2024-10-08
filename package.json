@@ -1,6 +1,6 @@
 {
 	"name": "envnest",
-	"version": "0.0.11",
+	"version": "0.0.12",
 	"private": false,
 	"keywords": [
 		".env",
@@ -24,10 +24,30 @@
 		"env-nestjs-zod-validation",
 		"typesafe-env"
 	],
-	"author": "Nischal Dahal",
+	"description": "Typesafe environment variables for NestJS using zod.",
+	"homepage": "https://github.com/nischal-dahal/envnest",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nischal-dahal/envnest"
+	},
+	"sponsor": {
+		"url": "https://nischal.pro"
+	},
+	"author": {
+		"name": "Nischal Dahal",
+		"url": "https://nischal-dahal.com.np",
+		"email": "neeswebservice@gmail.com"
+	},
 	"license": "MIT",
+	"main": "dist/index.js",
+	"module": "dist/index.mjs",
 	"types": "dist/index.d.ts",
-	"files": ["dist", "package.json", "LICENSE", "README.md"],
+	"files": [
+		"dist",
+		"package.json",
+		"LICENSE",
+		"README.md"
+	],
 	"scripts": {
 		"build": "tsup src/index.ts --format cjs,esm --dts",
 		"dev": "bunchee -w --no-clean",
@@ -49,6 +69,9 @@
 		"unlink": "pnpm unlink --global remix-zod-validator",
 		"link-cli": "pnpm run unlink && pnpm run link"
 	},
+	"dependencies": {
+		"@nestjs/config": "^3"
+	},
 	"peerDependencies": {
 		"@nestjs/config": "^3.2.3",
 		"typescript": ">=5.0.0",
@@ -69,5 +92,6 @@
 		"tsup": "^8.3.0",
 		"typescript": "^5.6.2",
 		"vitest": "^2.1.2"
-	}
+	},
+	"packageManager": "pnpm@9.11.0+sha512.0a203ffaed5a3f63242cd064c8fb5892366c103e328079318f78062f24ea8c9d50bc6a47aa3567cabefd824d170e78fa2745ed1f16b132e16436146b7688f19b"
 }
